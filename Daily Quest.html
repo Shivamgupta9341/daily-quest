@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily Quest</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f5f1;--card:#fff;--tx:#1d1d1b;--mut:#6b6b66;--ac:#5b4bdb;--ok:#1d9e75;--bd:#e3e1d9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17171a;--card:#222226;--tx:#f1f0ec;--mut:#9a9992;--ac:#8b7dff;--ok:#3ccf9b;--bd:#35353b}}
+:root[data-theme="dark"]{--bg:#17171a;--card:#222226;--tx:#f1f0ec;--mut:#9a9992;--ac:#8b7dff;--ok:#3ccf9b;--bd:#35353b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45}
+main{max-width:560px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:4px 0 2px}h2{font-size:15px;margin:22px 0 8px;color:var(--mut);font-weight:600}
+.sub{color:var(--mut);font-size:13px;margin:0 0 12px}
+.quote{position:relative;background:linear-gradient(135deg,#5b4bdb,#9b5cf6);color:#fff;border-radius:16px;padding:18px 16px 16px 52px;margin-bottom:14px;font-size:17px;font-weight:600;line-height:1.4;display:flex;gap:10px;justify-content:space-between;align-items:center;box-shadow:0 6px 18px rgba(91,75,219,.35)}
+.quote:before{content:"“";position:absolute;left:12px;top:-2px;font-size:64px;font-family:Georgia,serif;opacity:.35;line-height:1}
+.quote i{display:block;font-size:13px;font-weight:500;color:rgba(255,255,255,.85);font-style:normal;margin-top:6px}
+.quote button{background:rgba(255,255,255,.2);color:#fff;border-color:transparent;font-size:16px;flex:none}
+.card2{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-top:10px}
+.card2 input,.card2 textarea{font:inherit;font-size:13px;padding:7px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);min-width:0;width:100%}
+.card2 textarea{min-height:60px;resize:vertical;margin-top:6px}
+.ro{display:grid;grid-template-columns:1fr 56px 56px auto;gap:6px;margin-top:6px;align-items:center}
+.qi{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-top:6px;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;text-align:center}
+.st b{display:block;font-size:22px}.st span{font-size:12px;color:var(--mut)}
+.bar{height:8px;background:var(--bd);border-radius:6px;margin:8px 0 2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ac);transition:width .3s}
+.bar.g i{background:var(--ok)}
+.small{font-size:12px;color:var(--mut)}
+.task{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:8px}
+.task.done{border-color:var(--ok)}
+.t{font-weight:600;font-size:15px}.when{font-size:11px;color:var(--mut)}
+.tm{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:6px}
+.tm b{font-size:20px;font-variant-numeric:tabular-nums}
+.tm input{width:56px;font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx)}
+.btns{display:flex;gap:6px;margin-top:8px}
+.btns button{flex:1}
+button{font:inherit;font-size:13px;border:1px solid var(--bd);background:transparent;color:var(--tx);border-radius:8px;padding:8px 8px;cursor:pointer}
+button.full{background:var(--ac);color:#fff;border-color:var(--ac)}
+button.on{background:var(--ok);color:#fff;border-color:var(--ok)}
+button:disabled{opacity:.4;cursor:default}
+.week{display:flex;gap:6px}
+.d{flex:1;text-align:center;font-size:11px;color:var(--mut)}
+.d i{display:block;height:28px;border-radius:8px;background:var(--bd);margin-bottom:3px}
+.d i.h{background:var(--ok)}.d i.m{background:#e0a93b}
+.rw{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rw.cl{opacity:.55;text-decoration:line-through}
+.add{display:flex;gap:6px;margin-top:8px}
+.add input{font:inherit;font-size:14px;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);min-width:0}
+.rule{background:var(--card);border-left:4px solid var(--ac);border-radius:8px;padding:10px 12px;font-size:13px;margin-top:14px}
+#toast{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:536px;margin:0 auto;background:var(--ac);color:#fff;border-radius:12px;padding:12px 14px;font-size:14px;display:none;z-index:9}
+</style></head><body><main>
+<h1>🎯 Daily Quest</h1>
+<p class="sub" id="date"></p>
+<div class="quote"><div><span id="qt"></span><i id="qa"></i></div><button onclick="newQ()" title="New quote">↻</button></div>
+<div class="stats">
+<div class="st"><b id="streak">0</b><span>🔥 streak</span></div>
+<div class="st"><b id="xp">0</b><span>⭐ XP balance</span></div>
+<div class="st"><b id="lvl">1</b><span>🏆 level</span></div>
+</div>
+<div class="bar"><i id="lb"></i></div>
+<div class="small" id="lt"></div>
+
+<h2>Today's quests</h2>
+<div id="tasks"></div>
+<div class="rule">⏱️ <b>How the timer works:</b> set your daily target minutes for each skill, hit Start when you sit down, and the quest completes automatically when the target is reached. Keep going after that and you earn <b>+5 bonus XP for every extra 10 minutes</b>. Only one timer runs at a time.<br><br>💡 <b>Mini mode</b> = a tiny version (e.g. 3 questions) for low-energy days. It gives half XP and keeps your streak alive. A day counts for your streak when you finish at least 2 quests.<br><b>Rule:</b> miss one day, fine. <u>Never miss two.</u></div>
+
+<h2>Last 7 days</h2>
+<div class="week" id="week"></div>
+
+<h2>🎁 My rewards</h2>
+<div id="rewards"></div>
+<div class="add">
+<input id="rn" placeholder="Reward (e.g. chai + samosa)" style="flex:1">
+<input id="rc" type="number" placeholder="XP" style="width:70px">
+<button onclick="addR()">Add</button>
+</div>
+<h2>⚙️ Customize &amp; share</h2>
+<button onclick="tgS()" style="width:100%">Edit tasks, quotes &amp; share my setup</button>
+<div id="set" style="display:none"></div>
+</main>
+<div id="toast"></div>
+<script>
+var TASKS=[
+{id:'py',t:'🐍 Python: HackerRank / LeetCode',w:'Morning · 10–1',xp:20,min:60,mini:'Just 1 easy problem'},
+{id:'sql',t:'🗄️ SQL practice',w:'Morning · 10–1',xp:20,min:45,mini:'Write just 1 query'},
+{id:'apt',t:'🧮 Aptitude',w:'Afternoon · 2–6',xp:15,min:30,mini:'Just 3 questions'},
+{id:'rea',t:'🧩 Reasoning',w:'Afternoon · 2–6',xp:15,min:30,mini:'Just 3 questions'},
+{id:'plan',t:'📝 Plan tomorrow (2 min)',w:'Evening',xp:5,min:0,mini:'Write one line'}];
+var Q=[
+['Talk is cheap. Show me the code.','Linus Torvalds'],
+['First, solve the problem. Then, write the code.','John Johnson'],
+['Make it work, make it right, make it fast.','Kent Beck'],
+['Premature optimization is the root of all evil.','Donald Knuth'],
+['Simplicity is prerequisite for reliability.','Edsger W. Dijkstra'],
+['The best way to predict the future is to invent it.','Alan Kay'],
+['Software is eating the world.','Marc Andreessen'],
+['Any fool can write code a computer understands. Good programmers write code humans understand.','Martin Fowler'],
+['One problem a day is 365 problems a year.',''],
+['Consistency beats intensity. Show up daily.',''],
+['Every expert developer once got stuck on "Hello, World".',''],
+['Debugging is just learning in disguise.',''],
+['SQL today, data jobs tomorrow.',''],
+['Your future offer letter is being written in these library hours.',''],
+['Small commits every day build big careers.',''],
+['A bug you understand is a bug you will never write again.','']];
+var S={days:{},rewards:[{n:'Chai + samosa',c:60,x:0},{n:'1 episode / movie',c:150,x:0},{n:'Favourite meal',c:300,x:0}],spent:0,targets:{},act:null};
+try{var r=localStorage.getItem('dq2')||localStorage.getItem('dq1');if(r){var o=JSON.parse(r);for(var k in o)S[k]=o[k]}}catch(e){}
+S.act=null;S.targets=S.targets||{};var DEFQ=Q;if(!S.tasks)S.tasks=JSON.parse(JSON.stringify(TASKS));TASKS=S.tasks;S.myq=S.myq||[];Q=DEFQ.concat(S.myq);
+TASKS.forEach(function(t){if(!S.targets[t.id]&&S.targets[t.id]!==0)S.targets[t.id]=t.min});
+for(var dk in S.days){var dd=S.days[dk];for(var id in dd){if(typeof dd[id]==='string')dd[id]={s:dd[id],t:0};else if(!dd[id])dd[id]={s:null,t:0}}}
+function save(){try{localStorage.setItem('dq2',JSON.stringify(S))}catch(e){}}
+function key(d){return d.toLocaleDateString('en-CA')}
+var today=key(new Date());
+function rec(id){var m=S.days[today]||(S.days[today]={});return m[id]||(m[id]={s:null,t:0})}
+function dayXP(m){var s=0;TASKS.forEach(function(t){var r=m&&m[t.id];if(!r)return;if(r.s==='f'){s+=t.xp;var g=(r.g||S.targets[t.id]||0)*60;if(g&&r.t>g)s+=Math.floor((r.t-g)/600)*5}else if(r.s==='m')s+=Math.floor(t.xp/2)});return s}
+function cnt(m){if(!m)return 0;var n=0;for(var k in m)if(m[k]&&m[k].s)n++;return n}
+function total(){var s=0;for(var k in S.days)s+=dayXP(S.days[k]);return s}
+function fmt(sec){sec=Math.floor(sec);var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return(h?h+':':'')+(h&&m<10?'0':'')+m+':'+(s<10?'0':'')+s}
+function beep(){try{var c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator();o.connect(c.destination);o.frequency.value=880;o.start();setTimeout(function(){o.stop()},500)}catch(e){}}
+var qi=Math.floor(Date.now()/864e5)%Q.length;
+function showQ(){document.getElementById('qt').textContent='“'+Q[qi][0]+'”';document.getElementById('qa').textContent=Q[qi][1]?'— '+Q[qi][1]:''}
+function newQ(){qi=(qi+1+Math.floor(Math.random()*(Q.length-1)))%Q.length;showQ()}
+var tt;function toast(msg){var e=document.getElementById('toast');e.innerHTML=msg;e.style.display='block';clearTimeout(tt);tt=setTimeout(function(){e.style.display='none'},6000)}
+function celebrate(t){newQ();toast('🎉 <b>'+esc(t.t)+'</b> complete!<br><span style="font-size:13px;opacity:.9">'+esc(document.getElementById('qt').textContent+' '+document.getElementById('qa').textContent)+'</span>')}
+function tog(id){if(S.act&&S.act.id===id){S.act=null}else{S.act={id:id,last:Date.now()};var r=rec(id);if(!r.g)r.g=S.targets[id]}save();drawTasks()}
+function mark(id,v){var r=rec(id);r.s=(r.s===v)?null:v;if(r.s){var t=TASKS.filter(function(x){return x.id===id})[0];if(S.act&&S.act.id===id)S.act=null;celebrate(t)}save();drawAll()}
+function setTarget(id,v){v=parseInt(v);if(!(v>=0))return;S.targets[id]=v;var r=rec(id);if(r.s!=='f')r.g=v;save();drawTasks()}
+setInterval(function(){if(!S.act)return;var now=Date.now(),id=S.act.id,r=rec(id);r.t+=Math.min(now-S.act.last,120000)/1000;S.act.last=now;
+var g=(r.g||S.targets[id])*60,t=TASKS.filter(function(x){return x.id===id})[0];
+if(g&&r.s!=='f'&&r.t>=g){r.s='f';beep();celebrate(t);save();drawAll();return}
+save();upd(id);drawStats()},1000);
+function upd(id){var r=rec(id),g=(r.g||S.targets[id])*60,e=document.getElementById('el-'+id),p=document.getElementById('pb-'+id);if(e)e.textContent=fmt(r.t);if(p)p.style.width=(g?Math.min(100,r.t/g*100):0)+'%'}
+function drawStats(){var tot=total(),lv=Math.floor(tot/100)+1;
+document.getElementById('streak').textContent=streak();
+document.getElementById('xp').textContent=tot-S.spent;
+document.getElementById('lvl').textContent=lv;
+document.getElementById('lb').style.width=(tot%100)+'%';
+document.getElementById('lt').textContent=(100-tot%100)+' XP to level '+(lv+1)}
+function streak(){var n=0,d=new Date();if(cnt(S.days[key(d)])<2)d.setDate(d.getDate()-1);while(cnt(S.days[key(d)])>=2){n++;d.setDate(d.getDate()-1)}return n}
+function drawTasks(){var h='';TASKS.forEach(function(t){var r=rec(t.id),run=S.act&&S.act.id===t.id,g=(r.g||S.targets[t.id])*60,extra=g&&r.t>g?Math.floor((r.t-g)/60):0;
+h+='<div class="task'+(r.s?' done':'')+'"><div class="t">'+esc(t.t)+'</div><div class="when">'+(t.w?esc(t.w)+' · ':'')+'+'+t.xp+' XP'+(S.targets[t.id]>0?' · bonus +5 XP / extra 10 min':'')+'</div>';
+if(t.min||S.targets[t.id]){h+='<div class="tm"><div><b id="el-'+t.id+'">'+fmt(r.t)+'</b> <span class="small">'+(extra?'(+'+extra+' min bonus)':'')+'</span></div><div class="small">Target <input type="number" min="1" value="'+S.targets[t.id]+'" onchange="setTarget(\''+t.id+'\',this.value)"> min</div></div><div class="bar'+(r.s==='f'?' g':'')+'"><i id="pb-'+t.id+'" style="width:'+(g?Math.min(100,r.t/g*100):0)+'%"></i></div>'}
+h+='<div class="btns">';
+if(S.targets[t.id]>0)h+='<button class="'+(run?'on':'full')+'" onclick="tog(\''+t.id+'\')">'+(run?'⏸ Pause':'▶ Start')+'</button>';
+h+='<button class="'+(r.s==='f'?'on':'')+'" onclick="mark(\''+t.id+'\',\'f\')">'+(r.s==='f'?'✓ Done':'Done')+'</button><button class="'+(r.s==='m'?'on':'')+'" onclick="mark(\''+t.id+'\',\'m\')">'+(r.s==='m'?'✓ Mini':'Mini: '+esc(t.mini))+'</button></div></div>'});
+document.getElementById('tasks').innerHTML=h}
+function drawWeek(){var w='';for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);var c=cnt(S.days[key(d)]);w+='<div class="d"><i class="'+(c>=3?'h':(c>=1?'m':''))+'"></i>'+d.toLocaleDateString('en-US',{weekday:'narrow'})+' '+d.getDate()+'</div>'}document.getElementById('week').innerHTML=w}
+function drawRewards(){var tot=total(),rh='';S.rewards.forEach(function(r,i){var ok=!r.x&&tot-S.spent>=r.c;
+rh+='<div class="rw'+(r.x?' cl':'')+'"><div>'+r.n.replace(/</g,'&lt;')+'<div class="small">'+r.c+' XP</div></div><button '+(ok?'class="full"':'disabled')+' onclick="claim('+i+')">'+(r.x?'Claimed':(ok?'Claim!':'Locked'))+'</button></div>'});
+document.getElementById('rewards').innerHTML=rh}
+function addR(){var n=document.getElementById('rn').value.trim(),c=parseInt(document.getElementById('rc').value);if(!n||!c)return;S.rewards.push({n:n,c:c,x:0});save();drawRewards();document.getElementById('rn').value='';document.getElementById('rc').value=''}
+function claim(i){var r=S.rewards[i];if(r.x||total()-S.spent<r.c)return;S.spent+=r.c;r.x=1;save();drawAll()}
+function drawAll(){drawStats();drawTasks();drawWeek();drawRewards()}
+document.getElementById('date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long'});
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function tgS(){var e=document.getElementById('set');e.style.display=e.style.display==='none'?'block':'none';drawSet()}
+function rebuildQ(){Q=DEFQ.concat(S.myq)}
+function eT(i,k,v){if(k==='xp'){v=parseInt(v);if(!(v>=0))return}else if(!v.trim())return;TASKS[i][k]=v;save();drawAll()}
+function dT(i){var id=TASKS[i].id;if(S.act&&S.act.id===id)S.act=null;TASKS.splice(i,1);save();drawAll();drawSet()}
+function aT(){var n=document.getElementById('nn').value.trim();if(!n)return;var x=parseInt(document.getElementById('nx').value),m=parseInt(document.getElementById('nm').value),id='c'+Date.now();
+TASKS.push({id:id,t:n,w:'',xp:x>=0?x:10,min:m>=0?m:30,mini:'Do a tiny version'});S.targets[id]=m>=0?m:30;save();drawAll();drawSet()}
+function aQ(){var q=document.getElementById('nq').value.trim(),a=document.getElementById('na').value.trim();if(!q)return;S.myq.push([q,a]);rebuildQ();qi=Q.length-1;showQ();save();drawSet()}
+function dQ(i){S.myq.splice(i,1);rebuildQ();qi=0;showQ();save();drawSet()}
+function expS(){var o={tasks:S.tasks,targets:S.targets,myq:S.myq,rewards:S.rewards.map(function(r){return{n:r.n,c:r.c,x:0}})};var e=document.getElementById('code');e.value=btoa(unescape(encodeURIComponent(JSON.stringify(o))));e.select();try{document.execCommand('copy');toast('Setup code copied. Send it to your friend!')}catch(x){toast('Select the code and copy it.')}}
+function impS(){try{var o=JSON.parse(decodeURIComponent(escape(atob(document.getElementById('code').value.trim()))));if(!o.tasks||!o.tasks.length)throw 0;S.tasks=o.tasks;TASKS=S.tasks;S.targets=o.targets||{};S.myq=o.myq||[];if(o.rewards)S.rewards=o.rewards;S.spent=0;rebuildQ();qi=0;showQ();save();drawAll();drawSet();toast('Setup imported! Your own progress stays private.')}catch(x){toast('That code does not look right.')}}
+function drawSet(){var h='<div class="card2"><b>My tasks</b><div class="small">Rename, change XP, or set target minutes (0 = no timer).</div><div class="ro small"><span>Name</span><span>XP</span><span>Min</span><span></span></div>';
+TASKS.forEach(function(t,i){h+='<div class="ro"><input value="'+esc(t.t)+'" onchange="eT('+i+',\'t\',this.value)"><input type="number" min="0" value="'+t.xp+'" onchange="eT('+i+',\'xp\',this.value)"><input type="number" min="0" value="'+S.targets[t.id]+'" onchange="setTarget(\''+t.id+'\',this.value);drawSet()"><button onclick="dT('+i+')">✕</button></div>'});
+h+='<div class="ro"><input id="nn" placeholder="New task (e.g. 📚 Read a chapter)"><input id="nx" type="number" placeholder="XP"><input id="nm" type="number" placeholder="Min"><button onclick="aT()">Add</button></div></div>';
+h+='<div class="card2"><b>My quotes</b><div class="small">Your quotes get mixed in with the built-in ones.</div><textarea id="nq" placeholder="Type a quote you like"></textarea><div class="ro" style="grid-template-columns:1fr auto"><input id="na" placeholder="Author (optional)"><button onclick="aQ()">Add quote</button></div>';
+S.myq.forEach(function(q,i){h+='<div class="qi"><span>“'+esc(q[0])+'”'+(q[1]?' — '+esc(q[1]):'')+'</span><button onclick="dQ('+i+')">✕</button></div>'});
+h+='</div><div class="card2"><b>Share this page</b><div class="small">Send the page link to anyone. They get their <u>own private copy</u>: your progress is never shared, and they can change tasks, targets and quotes here. To send them your setup, press Export and share the code. To use a friend\'s setup, paste their code and press Import.</div><textarea id="code" placeholder="Setup code appears here (or paste a friend\'s code)"></textarea><div class="btns"><button onclick="expS()">Export my setup</button><button onclick="impS()">Import setup</button></div></div>';
+document.getElementById('set').innerHTML=h}
+showQ();drawAll();
+</script></body></html>
